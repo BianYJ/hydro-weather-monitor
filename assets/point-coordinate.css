@@ -1,0 +1,108 @@
+.point-cloud-canvas.coordinate-pick-enabled canvas {
+  cursor: crosshair;
+}
+
+.viewer-sidebar {
+  overflow-y: auto;
+}
+
+.point-coordinate-card {
+  margin-top: 14px;
+  padding: 13px;
+  border: 1px solid rgba(45, 212, 191, .28);
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgba(9, 50, 66, .94), rgba(6, 32, 47, .96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.coordinate-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.coordinate-heading strong {
+  color: #eaffff;
+  font-size: 12px;
+}
+
+.coordinate-heading span {
+  overflow: hidden;
+  color: #62d9cb;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coordinate-row {
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  min-height: 32px;
+  border-top: 1px solid rgba(89, 190, 199, .1);
+}
+
+.coordinate-row span {
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.coordinate-row.x span { background: #ca5454; }
+.coordinate-row.y span { background: #3d9c65; }
+.coordinate-row.z span { background: #3979c9; }
+
+.coordinate-row code {
+  overflow: hidden;
+  color: #d7edf1;
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 11px;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coordinate-empty {
+  margin: 0;
+  color: #7fa2ae;
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+.coordinate-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.coordinate-actions button {
+  min-height: 31px;
+  border: 1px solid rgba(67, 191, 192, .24);
+  border-radius: 7px;
+  color: #9fc8d0;
+  background: rgba(7, 37, 53, .86);
+  cursor: pointer;
+  font: inherit;
+  font-size: 9px;
+}
+
+.coordinate-actions button:hover {
+  border-color: rgba(60, 231, 210, .65);
+  color: #fff;
+  background: rgba(18, 76, 87, .9);
+}
+
+@media (max-width: 760px) {
+  .point-coordinate-card {
+    grid-column: 1 / -1;
+  }
+}
