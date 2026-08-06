@@ -5,57 +5,70 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const OUTPUT = resolve(ROOT, "data/eisk-tides.json");
 const BASE_URL = "https://www.eisk.cn";
-const STATIONS = [
-  { id: "332", name: "金山嘴", region: "上海市", x: 18, y: 75 },
-  { id: "334", name: "芦潮港", region: "上海市", x: 64, y: 76 },
-  { id: "349", name: "吴淞", region: "上海市", x: 53, y: 25 },
-  { id: "320", name: "高桥", region: "上海市", x: 69, y: 32 },
-  { id: "313", name: "崇明", region: "上海市", x: 56, y: 10 },
-];
+const CATALOG_URL = `${BASE_URL}/Tides/332.html`;
+const CONCURRENCY = Math.max(2, Math.min(24, Number(process.env.EISK_CONCURRENCY) || 12));
 
-function shanghaiDate(offsetDays = 0) {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Shanghai",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(new Date());
-  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-  const noonUtc = new Date(`${values.year}-${values.month}-${values.day}T04:00:00Z`);
-  noonUtc.setUTCDate(noonUtc.getUTCDate() + offsetDays);
-  return noonUtc.toISOString().slice(0, 10);
+function cleanText(value) {
+  return String(value || "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function parseEvents(html, fallbackDate) {
-  const dateMatch = html.match(/id=["']select_date["'][^>]*>(\d{4}-\d{2}-\d{2})</i);
-  const date = dateMatch?.[1] ?? fallbackDate;
-  const events = [];
-  const pattern = /class=["']tide2["'][^>]*>\s*(\d{2}:\d{2})\s*<span[^>]*>\s*(满潮|干潮)\s*<\/span>\s*([\d.]+)米/gi;
-  for (const match of html.matchAll(pattern)) {
-    events.push({
-      time: match[1],
-      kind: match[2] === "满潮" ? "高潮" : "低潮",
-      height: Number(match[3]),
-    });
+function discoverStations(html) {
+  const stations = [];
+  const seen = new Set();
+  const cityPattern = /<div class=["']city["']>([\s\S]*?)<\/div>/gi;
+  for (const cityMatch of html.matchAll(cityPattern)) {
+    const block = cityMatch[1];
+    const firstLinkAt = block.search(/<a\b/i);
+    const region = cleanText(firstLinkAt >= 0 ? block.slice(0, firstLinkAt) : "") || "其他地区";
+    const linkPattern = /<a href=["']\/Tides\/(\d+)\.html["'][^>]*title=["']([^"']*?)潮汐表["'][^>]*>([^<]+)<\/a>/gi;
+    for (const link of block.matchAll(linkPattern)) {
+      if (seen.has(link[1])) continue;
+      seen.add(link[1]);
+      stations.push({ id: link[1], name: cleanText(link[3]) || cleanText(link[2]), region });
+    }
   }
-  return { date, events };
+  if (!stations.length) throw new Error("未能从 Eisk 页面解析潮汐站目录");
+  return stations.sort((a, b) => `${a.region}${a.name}`.localeCompare(`${b.region}${b.name}`, "zh-CN"));
 }
 
-async function fetchText(url, attempts = 3) {
+function parseBigTides(html, stationId) {
+  const days = [];
+  const rowPattern = new RegExp(`<a href=["']\\/m\\/MiniTides\\/${stationId}\\.html\\?date=(\\d{4}-\\d{2}-\\d{2})["']>([\\s\\S]*?)<\\/a>`, "gi");
+  for (const row of html.matchAll(rowPattern)) {
+    const events = [];
+    const eventPattern = /class=["']tide2["'][^>]*>\s*(\d{2}:\d{2})\s*<span[^>]*>\s*(满潮|干潮)\s*<\/span>\s*([\d.]+)米/gi;
+    for (const event of row[2].matchAll(eventPattern)) {
+      events.push({
+        time: event[1],
+        kind: event[2] === "满潮" ? "高潮" : "低潮",
+        height: Number(event[3]),
+      });
+    }
+    if (events.length >= 2) days.push({ date: row[1], events });
+  }
+  return days;
+}
+
+async function fetchText(url, attempts = 2) {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 25_000);
+    const timer = setTimeout(() => controller.abort(), 30_000);
     try {
       const response = await fetch(url, {
         signal: controller.signal,
-        headers: { "user-agent": "hydro-weather-monitor/1.0 (+GitHub Pages data sync)" },
+        headers: { "user-agent": "hydro-weather-monitor/2.0 (+GitHub Pages tide sync)" },
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return await response.text();
     } catch (error) {
       lastError = error;
-      if (attempt < attempts) await new Promise((resolveDelay) => setTimeout(resolveDelay, attempt * 1500));
+      if (attempt < attempts) await new Promise((resolveDelay) => setTimeout(resolveDelay, 1200));
     } finally {
       clearTimeout(timer);
     }
@@ -71,39 +84,45 @@ async function readPrevious() {
   }
 }
 
-const previous = await readPrevious();
-const targetDates = [-1, 0, 1].map(shanghaiDate);
-const stations = [];
-
-for (const station of STATIONS) {
-  const days = [];
-  for (const date of targetDates) {
-    const url = `${BASE_URL}/Tides/${station.id}.html?date=${date}`;
-    try {
-      const parsed = parseEvents(await fetchText(url), date);
-      if (parsed.events.length < 2) throw new Error("未解析到完整潮汐时次");
-      days.push(parsed);
-    } catch (error) {
-      const fallback = previous?.stations
-        ?.find((item) => item.id === station.id)
-        ?.days?.find((item) => item.date === date);
-      if (fallback) {
-        days.push(fallback);
-      } else {
-        console.warn(`${station.name} ${date} 同步失败：${error.message}`);
-      }
+async function mapPool(items, concurrency, mapper) {
+  const results = new Array(items.length);
+  let cursor = 0;
+  async function worker() {
+    while (cursor < items.length) {
+      const index = cursor++;
+      results[index] = await mapper(items[index], index);
     }
   }
-  if (days.length) {
-    stations.push({
-      ...station,
-      sourceUrl: `${BASE_URL}/Tides/${station.id}.html`,
-      days: days.sort((a, b) => a.date.localeCompare(b.date)),
-    });
-  }
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker));
+  return results;
 }
 
-if (!stations.length) throw new Error("所有 Eisk 潮汐站同步失败，保留上一版文件");
+const previous = await readPrevious();
+const catalogHtml = await fetchText(CATALOG_URL, 3);
+const catalog = discoverStations(catalogHtml);
+let succeeded = 0;
+let failed = 0;
+
+const stations = await mapPool(catalog, CONCURRENCY, async (station, index) => {
+  try {
+    const html = await fetchText(`${BASE_URL}/BigTides/${station.id}`);
+    const days = parseBigTides(html, station.id);
+    if (!days.length) throw new Error("没有可用潮汐时次");
+    succeeded += 1;
+    if ((succeeded + failed) % 40 === 0) console.log(`同步进度 ${succeeded + failed}/${catalog.length}`);
+    return { ...station, sourceUrl: `${BASE_URL}/Tides/${station.id}.html`, days };
+  } catch (error) {
+    failed += 1;
+    const fallback = previous?.stations?.find((item) => item.id === station.id);
+    if ((succeeded + failed) % 40 === 0) console.log(`同步进度 ${succeeded + failed}/${catalog.length}`);
+    return {
+      ...station,
+      sourceUrl: `${BASE_URL}/Tides/${station.id}.html`,
+      days: fallback?.days || [],
+      syncError: error instanceof Error ? error.message : "同步失败",
+    };
+  }
+});
 
 const payload = {
   source: "Eisk 潮汐表精灵",
@@ -111,9 +130,12 @@ const payload = {
   sourceStatement: "潮汐表数据来自国家海洋信息中心；为天文潮位预报，不含气象增减水。",
   timezone: "Asia/Shanghai",
   generatedAt: new Date().toISOString(),
+  stationCount: stations.length,
+  succeeded,
+  failed,
   stations,
 };
 
 await mkdir(dirname(OUTPUT), { recursive: true });
 await writeFile(OUTPUT, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-console.log(`已更新 ${stations.length} 个潮汐站：${targetDates.join("、")}`);
+console.log(`已接入 ${stations.length} 个潮汐站；成功 ${succeeded}，待重试 ${failed}`);

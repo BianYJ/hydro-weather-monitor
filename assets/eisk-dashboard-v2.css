@@ -1,0 +1,214 @@
+.eisk-dashboard-rebuilt > :not(.eisk-dashboard-v2) { display: none !important; }
+
+.eisk-dashboard-v2 {
+  width: min(100%, 1480px);
+  margin: 0 auto;
+  padding: 28px clamp(18px, 3vw, 44px) 34px;
+  color: #e9f6f5;
+}
+
+.eisk-overview-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.eisk-title h1 { margin: 4px 0 8px; font-size: clamp(25px, 2.35vw, 38px); line-height: 1.15; }
+.eisk-title > p:last-child { margin: 0; color: #7f99a8; font-size: 14px; }
+.eisk-clock { min-width: 230px; text-align: right; }
+.eisk-clock strong { display: block; color: #ecfbf9; font-size: clamp(27px, 2.6vw, 40px); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.eisk-clock span,
+.eisk-clock em { display: block; margin-top: 3px; color: #8ba5b3; font-size: 12px; font-style: normal; }
+.eisk-clock em { color: #6bd8ca; }
+
+.eisk-search-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(280px, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.eisk-search-form {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 46px;
+  border: 1px solid rgba(97, 190, 189, .18);
+  border-radius: 11px;
+  background: rgba(7, 26, 40, .86);
+  overflow: hidden;
+}
+.eisk-search-form > span { text-align: center; color: #58d7ca; font-size: 17px; }
+.eisk-search-form input { width: 100%; border: 0; outline: 0; background: transparent; color: #eaf6f5; font-size: 14px; padding: 12px 4px; }
+.eisk-search-form input::placeholder { color: #557181; }
+.eisk-search-form button { align-self: stretch; border: 0; border-left: 1px solid rgba(97, 190, 189, .15); background: rgba(40, 139, 132, .16); color: #69dfd2; padding: 0 18px; cursor: pointer; }
+.eisk-search-form button:hover { background: rgba(40, 139, 132, .26); color: #dffffb; }
+.eisk-search-message { position: absolute; right: 0; top: calc(100% + 5px); z-index: 10; min-height: 0; border-radius: 7px; background: rgba(23, 64, 67, .96); color: #bafbf3; padding: 0; font-size: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, .28); }
+.eisk-search-message:not(:empty) { padding: 8px 12px; }
+.eisk-search-message.error { background: rgba(91, 38, 48, .96); color: #ffc4cc; }
+
+.eisk-status-strip {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3vw, 42px);
+  min-height: 46px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(86, 171, 182, .1);
+  border-radius: 10px;
+  background: rgba(7, 27, 42, .62);
+  padding: 8px 15px;
+}
+.eisk-status-strip > div { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #7893a2; }
+.eisk-status-strip strong { color: #c6dfdf; font-weight: 600; }
+.eisk-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #45dac8; box-shadow: 0 0 0 5px rgba(69, 218, 200, .1); }
+.eisk-auto { display: flex; align-items: center; gap: 8px; margin-left: auto; color: #86a1ad; font-size: 12px; cursor: pointer; }
+.eisk-auto input { position: absolute; opacity: 0; pointer-events: none; }
+.eisk-auto span { position: relative; width: 34px; height: 18px; border-radius: 20px; background: #29414d; transition: .2s; }
+.eisk-auto span::after { content: ""; position: absolute; left: 3px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: #91a7b1; transition: .2s; }
+.eisk-auto input:checked + span { background: rgba(55, 197, 184, .4); }
+.eisk-auto input:checked + span::after { left: 19px; background: #69e4d7; }
+
+.eisk-metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 16px; }
+.eisk-metric { position: relative; min-height: 188px; border: 1px solid rgba(92, 180, 189, .12); border-radius: 14px; background: linear-gradient(145deg, rgba(11, 39, 56, .9), rgba(5, 25, 40, .92)); padding: 18px 20px; overflow: hidden; }
+.eisk-metric::after { content: ""; position: absolute; right: -30px; top: -40px; width: 130px; height: 130px; border-radius: 50%; background: rgba(75, 214, 200, .055); }
+.eisk-metric.high::after { background: rgba(255, 132, 139, .06); }
+.eisk-metric.low::after { background: rgba(93, 167, 255, .07); }
+.eisk-metric > div { display: flex; align-items: center; justify-content: space-between; }
+.eisk-metric > div > span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(68, 213, 198, .1); color: #52d8ca; font-size: 20px; }
+.eisk-metric em { border-radius: 20px; background: rgba(50, 204, 189, .1); color: #58d9cb; padding: 4px 9px; font-size: 10px; font-style: normal; }
+.eisk-metric p { margin: 17px 0 2px; color: #7f9aaa; font-size: 13px; }
+.eisk-metric > strong { color: #efffff; font-size: clamp(37px, 3.4vw, 52px); font-weight: 600; letter-spacing: -.035em; }
+.eisk-metric > small { margin-left: 6px; color: #748f9e; font-size: 14px; }
+.eisk-metric footer { display: flex; align-items: baseline; gap: 10px; margin-top: 10px; color: #65dace; font-size: 12px; }
+.eisk-metric footer b { color: #f1fbfa; font-size: clamp(22px, 2vw, 29px); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.eisk-metric footer span { color: #7893a1; }
+.eisk-metric.high footer { color: #ff999f; }
+.eisk-metric.low footer { color: #75b7ff; }
+
+.eisk-main-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(310px, .75fr); gap: 16px; margin-bottom: 16px; }
+.eisk-side-stack { display: grid; gap: 16px; }
+.eisk-panel { border: 1px solid rgba(91, 177, 187, .11); border-radius: 14px; background: rgba(7, 28, 43, .76); padding: 18px; }
+.eisk-panel > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 15px; }
+.eisk-panel h2 { margin: 3px 0 0; font-size: 19px; }
+.eisk-panel > header > a,
+.eisk-panel > header > span { color: #58d9cc; font-size: 11px; text-decoration: none; }
+.eisk-panel-loading,
+.eisk-empty { display: grid; place-items: center; min-height: 120px; color: #718c9a; font-size: 13px; }
+.eisk-empty.error { color: #ff9fa9; }
+
+.eisk-selected-station { display: flex; align-items: center; justify-content: space-between; gap: 18px; border-radius: 12px; background: linear-gradient(105deg, rgba(24, 89, 88, .18), rgba(20, 50, 63, .1)); padding: 16px; }
+.eisk-selected-station span { color: #718e9d; font-size: 11px; }
+.eisk-selected-station h3 { margin: 4px 0; font-size: 24px; }
+.eisk-selected-station small { color: #728d9c; }
+.eisk-selected-station > div:last-child { text-align: right; }
+.eisk-selected-station > div:last-child strong { display: block; margin: 4px 0; color: #58dbce; font-size: 16px; }
+.eisk-selected-station em { color: #efffff; font-size: 24px; font-style: normal; font-weight: 700; }
+
+.eisk-tide-events { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; margin-top: 13px; }
+.eisk-tide-events button { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 2px 8px; min-height: 80px; border: 1px solid rgba(94, 180, 189, .12); border-radius: 10px; background: rgba(5, 25, 39, .65); color: #dcecec; padding: 10px; text-align: left; cursor: default; }
+.eisk-tide-events button:hover { border-color: rgba(89, 219, 205, .42); background: rgba(15, 55, 67, .8); }
+.eisk-tide-events i { grid-row: 1 / 4; width: 8px; height: 8px; border-radius: 50%; background: #61aef8; }
+.eisk-tide-events .high i { background: #ff8b94; }
+.eisk-tide-events b { font-size: 17px; font-variant-numeric: tabular-nums; }
+.eisk-tide-events span { color: #839ca8; font-size: 10px; }
+.eisk-tide-events strong { color: #bed3d8; font-size: 12px; }
+.eisk-related { margin-top: 15px; }
+.eisk-related > span { color: #6f8b99; font-size: 11px; }
+.eisk-related > div { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+.eisk-related button { border: 1px solid rgba(96, 180, 188, .14); border-radius: 7px; background: rgba(9, 36, 50, .7); color: #8fa7b1; padding: 7px 11px; cursor: pointer; }
+.eisk-related button:hover,
+.eisk-related button.active { border-color: rgba(85, 216, 202, .45); color: #62dfd2; }
+
+.eisk-weather-main { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 12px; }
+.eisk-weather-main > span { color: #f8cf71; font-size: 36px; }
+.eisk-weather-main > div strong { display: block; font-size: 34px; }
+.eisk-weather-main > div small { color: #7e98a5; font-size: 11px; }
+.eisk-weather-main em { color: #aac0c8; font-size: 12px; font-style: normal; text-align: right; }
+.eisk-weather-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 14px; }
+.eisk-weather-grid > div { border-radius: 8px; background: rgba(8, 35, 50, .7); padding: 9px; }
+.eisk-weather-grid span { display: block; color: #6e8a98; font-size: 10px; }
+.eisk-weather-grid strong { display: block; margin-top: 4px; color: #ccdcdf; font-size: 12px; }
+
+.eisk-alert-card { display: flex; gap: 12px; border: 1px solid rgba(244, 197, 101, .16); border-radius: 11px; background: rgba(92, 68, 30, .1); padding: 14px; }
+.eisk-alert-card > i { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 auto; border-radius: 50%; background: rgba(246, 199, 100, .12); color: #f5c767; font-style: normal; }
+.eisk-alert-card strong { font-size: 13px; }
+.eisk-alert-card p { margin: 6px 0; color: #95adb6; font-size: 12px; line-height: 1.55; }
+.eisk-alert-card small { color: #6d8795; font-size: 10px; line-height: 1.45; }
+.eisk-alert-card.muted { border-color: rgba(95, 180, 189, .12); background: rgba(8, 38, 52, .55); }
+
+.eisk-rain-panel { margin-bottom: 14px; }
+.eisk-rain-summary { display: flex; gap: 28px; margin-bottom: 12px; color: #7893a0; font-size: 12px; }
+.eisk-rain-summary strong { margin-left: 5px; color: #d9e9e9; }
+.eisk-rain-chart { position: relative; display: grid; grid-template-columns: repeat(24, minmax(24px, 1fr)); align-items: end; gap: clamp(3px, .6vw, 9px); min-height: 150px; border-bottom: 1px solid rgba(92, 172, 182, .12); padding: 18px 4px 0; }
+.eisk-rain-chart button { display: grid; grid-template-rows: 18px 108px 20px; align-items: end; justify-items: center; height: 146px; border: 0; background: transparent; color: #76919e; padding: 0; cursor: default; }
+.eisk-rain-chart button:hover { background: linear-gradient(transparent, rgba(80, 203, 194, .06)); }
+.eisk-rain-chart em { align-self: end; color: #62d7cc; font-size: 9px; font-style: normal; }
+.eisk-rain-chart i { display: block; width: min(18px, 72%); min-height: 3px; border-radius: 4px 4px 1px 1px; background: linear-gradient(#57dcd0, #248e9f); box-shadow: 0 0 12px rgba(55, 200, 195, .1); }
+.eisk-rain-chart small { align-self: center; color: #667f8d; font-size: 9px; }
+
+.eisk-hover-chart { position: relative; }
+.eisk-chart-tooltip { position: absolute; z-index: 30; display: none; width: max-content; max-width: 190px; border: 1px solid rgba(104, 212, 202, .22); border-radius: 7px; background: rgba(3, 18, 29, .96); color: #dff7f4; padding: 7px 9px; font-size: 11px; line-height: 1.4; pointer-events: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+.eisk-chart-tooltip.show { display: block; }
+.eisk-source-note { color: #607d8b; font-size: 11px; text-align: center; line-height: 1.6; }
+
+.topbar { min-height: 66px; }
+.topbar .nav { gap: 3px; overflow-x: auto; scrollbar-width: none; }
+.topbar .nav::-webkit-scrollbar { display: none; }
+.topbar .nav button,
+.topbar .nav a { min-height: 40px; white-space: nowrap; }
+.feature-shell { width: min(100%, 1480px); margin-inline: auto; }
+.feature-panel { min-height: min(720px, calc(100vh - 165px)); }
+.vessel-shell,
+.model-shell { width: min(100%, 1600px); margin-inline: auto; }
+
+body.eisk-route-switching::after {
+  content: "正在切换…";
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 99999;
+  border: 1px solid rgba(90, 214, 201, .25);
+  border-radius: 9px;
+  background: rgba(4, 23, 35, .94);
+  color: #75e4d8;
+  padding: 10px 14px;
+  font-size: 12px;
+  pointer-events: none;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .3);
+}
+
+@media (max-width: 1120px) {
+  .eisk-main-grid { grid-template-columns: 1fr; }
+  .eisk-side-stack { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 820px) {
+  .eisk-dashboard-v2 { padding: 20px 14px 28px; }
+  .eisk-overview-head { align-items: flex-start; }
+  .eisk-search-row { grid-template-columns: 1fr; }
+  .eisk-status-strip { flex-wrap: wrap; gap: 10px 22px; }
+  .eisk-auto { margin-left: 0; }
+  .eisk-metric-grid { grid-template-columns: 1fr; }
+  .eisk-metric { min-height: 166px; }
+  .eisk-tide-events { grid-template-columns: repeat(2, 1fr); }
+  .eisk-rain-chart { overflow-x: auto; grid-template-columns: repeat(24, 34px); }
+}
+
+@media (max-width: 560px) {
+  .eisk-overview-head { flex-direction: column; }
+  .eisk-clock { min-width: 0; text-align: left; }
+  .eisk-clock strong { font-size: 30px; }
+  .eisk-search-form { grid-template-columns: 32px minmax(0, 1fr) auto; }
+  .eisk-search-form button { padding: 0 11px; }
+  .eisk-status-strip { align-items: flex-start; flex-direction: column; }
+  .eisk-side-stack { grid-template-columns: 1fr; }
+  .eisk-selected-station { align-items: flex-start; flex-direction: column; }
+  .eisk-selected-station > div:last-child { text-align: left; }
+  .eisk-weather-main { grid-template-columns: auto 1fr; }
+  .eisk-weather-main em { grid-column: 1 / -1; text-align: left; }
+  .eisk-weather-grid { grid-template-columns: 1fr; }
+  .eisk-rain-summary { flex-direction: column; gap: 5px; }
+}

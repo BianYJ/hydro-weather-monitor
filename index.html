@@ -15,20 +15,27 @@
     <link rel="stylesheet" href="./assets/vessel-system.css">
     <link rel="stylesheet" href="./assets/model-viewer.css?v=20260805-v2">
     <link rel="stylesheet" href="./assets/point-coordinate.css?v=20260805">
-    <link rel="stylesheet" href="./assets/eisk-tides.css?v=20260806">
+    <link rel="stylesheet" href="./assets/eisk-dashboard-v2.css?v=20260806-v2">
   </head>
   <body>
     <div id="root"></div>
     <script src="./assets/vessel-system.js"></script>
-    <script src="./assets/eisk-tides.js?v=20260806"></script>
+    <script src="./assets/eisk-dashboard-v2.js?v=20260806-v2"></script>
     <script>
       window.addEventListener("load", function () {
+        function loadModelViewer() {
         var modelViewerScript = document.createElement("script");
         modelViewerScript.src = "./assets/model-viewer.js?v=20260805-v2";
         modelViewerScript.onerror = function () {
           console.error("三维模型查看器加载失败，主页面仍可继续使用");
         };
         document.body.appendChild(modelViewerScript);
+        }
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(loadModelViewer, { timeout: 2500 });
+        } else {
+          window.setTimeout(loadModelViewer, 1200);
+        }
       });
     </script>
   </body>
