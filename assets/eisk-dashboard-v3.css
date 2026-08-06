@@ -1,0 +1,96 @@
+.heading-tools { flex-wrap: wrap; justify-content: flex-end; }
+.heading-tools .city-search { min-width: 250px; }
+.heading-tools .eisk-station-search { min-width: 280px; }
+.heading-tools { position: relative; }
+.eisk-search-message { position: absolute; right: 0; top: calc(100% + 5px); z-index: 20; border-radius: 7px; background: rgba(15, 65, 66, .96); color: #bdfbf4; font-size: 11px; box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+.eisk-search-message:not(:empty) { padding: 7px 10px; }
+.eisk-search-message.error { background: rgba(92, 36, 47, .96); color: #ffc4cc; }
+.clock .eisk-lunar { display: block; margin-top: 2px; color: #65dacd; font-size: 10px; font-style: normal; }
+
+.eisk-status-hidden { display: none !important; }
+.eisk-status-count { color: #61d9cc !important; font-weight: 600; }
+.status-strip .updated { margin-left: auto; }
+.eisk-updated-text { color: #7f9aa8; font-size: 11px; }
+
+.metric-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.eisk-hidden-card { display: none !important; }
+.eisk-card-enhanced > :not(.eisk-card-layer) { display: none !important; }
+.eisk-card-layer { display: contents; }
+.eisk-card-layer .metric-foot { align-items: center; }
+.eisk-card-layer .eisk-big-time { color: #e9fffc; font-size: clamp(18px, 1.65vw, 25px); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.eisk-card-layer .metric-foot small { margin-left: auto; }
+
+.eisk-panel-enhanced > :not(.eisk-station-layer):not(.eisk-alert-layer),
+.eisk-rain-enhanced > :not(.eisk-rain-layer) { display: none !important; }
+.eisk-station-layer,
+.eisk-alert-layer,
+.eisk-rain-layer { width: 100%; }
+.eisk-station-layer .panel-heading a { color: #59d8cb; font-size: 11px; text-decoration: none; }
+
+.eisk-station-hero { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 125px; border: 1px solid rgba(76, 185, 182, .13); border-radius: 12px; background: linear-gradient(120deg, rgba(16, 73, 76, .2), rgba(9, 35, 51, .62)); padding: 18px 20px; }
+.eisk-station-hero span { color: #6f8e9d; font-size: 11px; }
+.eisk-station-hero h3 { margin: 5px 0; color: #edfdfb; font-size: 25px; }
+.eisk-station-hero small { color: #6f8997; font-size: 11px; }
+.eisk-station-hero > div:last-child { text-align: right; }
+.eisk-station-hero strong { display: block; margin: 5px 0; color: #f0ffff; font-size: 27px; }
+.eisk-station-hero em { color: #5ce0d3; font-size: 13px; font-style: normal; }
+
+.eisk-event-chart { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; margin-top: 12px; }
+.eisk-event-chart button { display: grid; grid-template-columns: 8px 1fr; align-items: center; gap: 2px 8px; min-height: 78px; border: 1px solid rgba(86, 175, 185, .12); border-radius: 9px; background: rgba(5, 27, 42, .68); color: #dbecec; padding: 10px; text-align: left; cursor: default; }
+.eisk-event-chart button:hover { border-color: rgba(85, 216, 202, .4); background: rgba(13, 53, 65, .78); }
+.eisk-event-chart i { grid-row: 1 / 4; width: 8px; height: 8px; border-radius: 50%; background: #62acf6; }
+.eisk-event-chart .high i { background: #ff8d96; }
+.eisk-event-chart b { font-size: 17px; font-variant-numeric: tabular-nums; }
+.eisk-event-chart span { color: #75909e; font-size: 10px; }
+.eisk-event-chart strong { color: #bcd1d6; font-size: 12px; }
+
+.eisk-quick-stations { margin-top: 14px; }
+.eisk-quick-stations > span { color: #6e8997; font-size: 10px; }
+.eisk-quick-stations > div { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 7px; }
+.eisk-quick-stations button { border: 1px solid rgba(89, 173, 182, .14); border-radius: 7px; background: rgba(8, 35, 50, .7); color: #819aa6; padding: 7px 11px; cursor: pointer; }
+.eisk-quick-stations button:hover,
+.eisk-quick-stations button.active { border-color: rgba(81, 211, 198, .42); color: #5ddccd; }
+
+.eisk-alert { display: flex; gap: 12px; border: 1px solid rgba(245, 196, 96, .17); border-radius: 11px; background: rgba(88, 64, 29, .12); padding: 14px; }
+.eisk-alert > i { display: grid; place-items: center; width: 31px; height: 31px; flex: 0 0 auto; border-radius: 50%; background: rgba(246, 198, 99, .14); color: #f5c663; font-style: normal; }
+.eisk-alert strong { font-size: 13px; }
+.eisk-alert p { margin: 6px 0; color: #91a9b4; font-size: 11px; line-height: 1.55; }
+.eisk-alert small { color: #687f8d; font-size: 9px; line-height: 1.5; }
+.eisk-empty { display: grid; place-items: center; min-height: 100px; color: #6c8795; font-size: 12px; }
+
+.eisk-hidden-trend { display: none !important; }
+.trend-grid { grid-template-columns: 1fr !important; }
+.eisk-rain-summary { display: flex; gap: 28px; margin: 0 0 12px; color: #718b99; font-size: 11px; }
+.eisk-rain-summary strong { margin-left: 5px; color: #dceceb; }
+.eisk-rain-chart { position: relative; display: grid; grid-template-columns: repeat(24, minmax(22px, 1fr)); align-items: end; gap: clamp(3px, .55vw, 8px); min-height: 142px; border-bottom: 1px solid rgba(81, 165, 176, .12); padding: 12px 4px 0; }
+.eisk-rain-chart button { display: grid; grid-template-rows: 17px 96px 20px; align-items: end; justify-items: center; height: 133px; border: 0; background: transparent; color: #6d8996; padding: 0; cursor: default; }
+.eisk-rain-chart button:hover { background: linear-gradient(transparent, rgba(70, 195, 188, .06)); }
+.eisk-rain-chart em { color: #59d7cb; font-size: 9px; font-style: normal; }
+.eisk-rain-chart i { display: block; width: min(18px, 75%); min-height: 3px; border-radius: 4px 4px 1px 1px; background: linear-gradient(#58dcd0, #258e9f); }
+.eisk-rain-chart small { align-self: center; color: #607c89; font-size: 9px; }
+
+.eisk-hover-chart { position: relative; }
+.eisk-chart-tip { position: absolute; z-index: 30; display: none; width: max-content; max-width: 190px; border: 1px solid rgba(94, 205, 196, .22); border-radius: 7px; background: rgba(3, 19, 30, .96); color: #e0f8f5; padding: 7px 9px; font-size: 10px; line-height: 1.4; pointer-events: none; box-shadow: 0 8px 22px rgba(0,0,0,.35); }
+.eisk-chart-tip.show { display: block; }
+
+.topbar .nav { gap: 3px; overflow-x: auto; scrollbar-width: none; }
+.topbar .nav::-webkit-scrollbar { display: none; }
+.topbar .nav button { white-space: nowrap; }
+.feature-shell { width: min(100%, 1480px); margin-inline: auto; }
+.feature-panel { min-height: min(720px, calc(100vh - 165px)); }
+
+@media (max-width: 1050px) {
+  .metric-grid { grid-template-columns: 1fr !important; }
+  .eisk-event-chart { grid-template-columns: repeat(2, 1fr); }
+  .heading-tools { justify-content: flex-start; }
+}
+
+@media (max-width: 720px) {
+  .heading-tools .city-search,
+  .heading-tools .eisk-station-search { min-width: 100%; width: 100%; }
+  .status-strip { flex-wrap: wrap; }
+  .status-strip .updated { margin-left: 0; }
+  .eisk-station-hero { align-items: flex-start; flex-direction: column; }
+  .eisk-station-hero > div:last-child { text-align: left; }
+  .eisk-rain-chart { overflow-x: auto; grid-template-columns: repeat(24, 34px); }
+}

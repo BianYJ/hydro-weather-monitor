@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const OUTPUT = resolve(ROOT, "data/eisk-tides.json");
+const EMBEDDED_OUTPUT = resolve(ROOT, "assets/eisk-tides-data.js");
 const BASE_URL = "https://www.eisk.cn";
 const CATALOG_URL = `${BASE_URL}/Tides/332.html`;
 const CONCURRENCY = Math.max(2, Math.min(24, Number(process.env.EISK_CONCURRENCY) || 12));
@@ -138,4 +139,5 @@ const payload = {
 
 await mkdir(dirname(OUTPUT), { recursive: true });
 await writeFile(OUTPUT, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+await writeFile(EMBEDDED_OUTPUT, `window.__EISK_TIDE_DATA__=${JSON.stringify(payload)};\n`, "utf8");
 console.log(`已接入 ${stations.length} 个潮汐站；成功 ${succeeded}，待重试 ${failed}`);
